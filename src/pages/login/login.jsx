@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {Form,Input,Button} from 'antd';
 import {UserOutlined,LockOutlined} from '@ant-design/icons';
 import './css/login.less'
@@ -12,27 +12,58 @@ export default class Login extends Component {
   onFinish = values => {
     console.log('我收到了登录表单的数据: ', values);
 	};
+
+	//demo函数会在用户每次在密码框里输入一个字符的时候调用，会把用户输入的值传递过来，即：value
+	errmsg = []
+	pwdValidator = (_, value)=>{
+		if(!value.trim()) this.errmsg.push('密码必须输入')
+		if(value.length < 4) this.errmsg.push('密码必须大于等于4位')
+		if(value.length > 12) this.errmsg.push('密码必须小于等于12位')
+		if(!(/^\w+$/).test(value)) this.errmsg.push('密码必须是英文、数字或下划线组成')
+		if(this.errmsg.length > 0 ) return Promise.reject(this.errmsg)
+		else return Promise.resolve()
+	}
 	
 	render() {
+		/*
+			用户名/密码的的合法性要求
+				1). 必须输入
+				2). 必须大于等于4位
+				3). 必须小于等于12位
+				4). 必须是英文、数字或下划线组成
+			*/
 		return (
 			<div className="login">
-				<div className="login-header">
+				<header className="login-header">
 					<img src={logo} alt="logo"/>
 					<h1>商品管理系统</h1>
-				</div>
-				<div className="login-content">
-					<h1>用户登录</h1>
+				</header>
+				<section className="login-content">
+					<span className="form-title">用户登录</span>
 					<Form
 						className="login-form"
 						onFinish={this.onFinish}
 					>
-						<Item name="username">
+						<Item
+							name="username"
+							rules={[
+								{required:true,message:'用户名必须输入'},//必填
+								{min:4,message:'用户名必须大于等于4位'},
+								{max:12,message:'用户名必须小于等于12位'},
+								{pattern:/^\w+$/,message:'用户名必须是英文、数字或下划线组成'}
+							]} 
+						>
 							<Input 
 								prefix={<UserOutlined className="site-form-item-icon" />} 
 								placeholder="用户名" 
 							/>
 						</Item>
-						<Item name="password">
+						<Item 
+							name="password"
+							rules={[
+								{validator:this.pwdValidator}
+							]}
+						>
 							<Input
 								prefix={<LockOutlined className="site-form-item-icon" />}
 								type="password"
@@ -49,7 +80,7 @@ export default class Login extends Component {
 							</Button>
 						</Item>
 					</Form>
-				</div>
+				</section>
 			</div>
 		)
 	}
