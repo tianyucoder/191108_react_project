@@ -1,43 +1,11 @@
 import React, {Component} from 'react'
-import {Form,Input,Button,message} from 'antd';
+import {Form,Input,Button} from 'antd';
 import {UserOutlined,LockOutlined} from '@ant-design/icons';
-import axios from 'axios'
-import qs from 'querystring'
+import {reqLogin} from '../../ajax'
 import './css/login.less'
 import logo from './imgs/logo.png'
 
 const {Item} = Form
-
-//使用axios请求拦截器
-axios.interceptors.request.use((config)=>{
-	//config是包含本次请求所有的配置项(请求地址，请参数，请求方式等等)
-	const {method,data} = config //获取请求方式、参数
-	//如果你发送的是post请求，而且你携带的还是json编码的数据，就要将json编码改为urlencoded编码
-	if(method.toLowerCase() === 'post' && data instanceof Object){
-		config.data = qs.stringify(data) 
-		//JSON.stringify是用于将一个对象转为JSON字符串
-		//qs.stringify是用于将一个对象转为urlencoded编码的字符串
-	}
-	return config
-})
-
-//使用功能axios响应拦截器
-axios.interceptors.response.use(
-	//响应成功的回调--状态为2开头
-	response => response.data,
-	//响应失败的回调--1.服务器返回的状态码非2开头 2.服务器根本就没有任何响应。
-	err => {
-		//console.log('###',err);
-		let errmsg = ''
-		if(err.message.indexOf('401') !== -1){
-			errmsg = '身份校验失败，请重新登录！'
-		}else if(err.message.indexOf('Network Error') !== -1){
-			errmsg = '请检查网络连接！'
-		}
-		message.error(errmsg)
-		return new Promise(()=>{})
-	}
-)
 
 export default class Login extends Component {
 
@@ -45,7 +13,7 @@ export default class Login extends Component {
   onFinish = async values => {
 		//获取表单数据
 		//axios发送post请求，默认会把参数通过请求体携带，以什么编码形式进行编码？url json
-		let result = await axios.post('http://localhost:3000/mange',values)
+		let result = await reqLogin(values)
 		console.log('@@@',result);
 	};
 	
