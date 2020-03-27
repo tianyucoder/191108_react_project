@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Form,Input,Button} from 'antd';
 import {UserOutlined,LockOutlined} from '@ant-design/icons';
+import axios from 'axios'
 import './css/login.less'
 import logo from './imgs/logo.png'
 
@@ -10,11 +11,16 @@ export default class Login extends Component {
 
 	//表单提交的回调
   onFinish = values => {
-    console.log('我收到了登录表单的数据: ', values);
+		//console.log('我收到了登录表单的数据: ', values);
+		const {username,password} = values
+		axios.post('http://localhost:3000/login',{username,password}).then(
+			response => {console.log(response);},
+			error => {console.log(error);}
+		)
 	};
 	
 	//pwdValidator函数会在用户每次在密码框里输入一个字符的时候调用，会把用户输入的值传递过来，即：value
-	pwdValidator = (_, value)=>{
+	pwdValidator = (_, value='')=>{
 		let errmsg = []
 		if(!value.trim()) errmsg.push('密码必须输入')
 		if(value.length < 4) errmsg.push('密码必须大于等于4位')
