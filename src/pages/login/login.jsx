@@ -2,20 +2,35 @@ import React, {Component} from 'react'
 import {Form,Input,Button} from 'antd';
 import {UserOutlined,LockOutlined} from '@ant-design/icons';
 import axios from 'axios'
+import qs from 'querystring'
 import './css/login.less'
 import logo from './imgs/logo.png'
 
 const {Item} = Form
 
+//使用axios请求拦截器
+axios.interceptors.request.use((config)=>{
+	//config是包含本次请求所有的配置项(请求地址，请参数，请求方式等等)
+	const {method,data} = config //获取请求方式、参数
+	//如果你发送的是post请求，而且你携带的还是json编码的数据，就要将json编码改为urlencoded编码
+	if(method.toLowerCase() === 'post' && data instanceof Object){
+		config.data = qs.stringify(data) 
+		//JSON.stringify是用于将一个对象转为JSON字符串
+		//qs.stringify是用于将一个对象转为urlencoded编码的字符串
+	}
+	return config
+})
+
 export default class Login extends Component {
 
 	//表单提交的回调
   onFinish = values => {
-		//console.log('我收到了登录表单的数据: ', values);
-		const {username,password} = values
-		axios.post('http://localhost:3000/login',{username,password}).then(
-			response => {console.log(response);},
+		//获取表单数据
+		//const {username,password} = values
+		axios.post('http://localhost:3000/login',values).then(
+			response => {console.log(response.data);},
 			error => {console.log(error);}
+			//axios发送post请求，默认会把参数通过请求体携带，以什么编码形式进行编码？url json
 		)
 	};
 	
