@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form,Input,Button} from 'antd';
+import {Form,Input,Button,message} from 'antd';
 import {UserOutlined,LockOutlined} from '@ant-design/icons';
 import axios from 'axios'
 import qs from 'querystring'
@@ -21,17 +21,32 @@ axios.interceptors.request.use((config)=>{
 	return config
 })
 
+//使用功能axios响应拦截器
+axios.interceptors.response.use(
+	//响应成功的回调--状态为2开头
+	response => response.data,
+	//响应失败的回调--1.服务器返回的状态码非2开头 2.服务器根本就没有任何响应。
+	err => {
+		//console.log('###',err);
+		let errmsg = ''
+		if(err.message.indexOf('401') !== -1){
+			errmsg = '身份校验失败，请重新登录！'
+		}else if(err.message.indexOf('Network Error') !== -1){
+			errmsg = '请检查网络连接！'
+		}
+		message.error(errmsg)
+		return new Promise(()=>{})
+	}
+)
+
 export default class Login extends Component {
 
 	//表单提交的回调
-  onFinish = values => {
+  onFinish = async values => {
 		//获取表单数据
-		//const {username,password} = values
-		axios.post('http://localhost:3000/login',values).then(
-			response => {console.log(response.data);},
-			error => {console.log(error);}
-			//axios发送post请求，默认会把参数通过请求体携带，以什么编码形式进行编码？url json
-		)
+		//axios发送post请求，默认会把参数通过请求体携带，以什么编码形式进行编码？url json
+		let result = await axios.post('http://localhost:3000/mange',values)
+		console.log('@@@',result);
 	};
 	
 	//pwdValidator函数会在用户每次在密码框里输入一个字符的时候调用，会把用户输入的值传递过来，即：value
