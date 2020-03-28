@@ -16,5 +16,5 @@
 			5.提取文件：
 					5.1 提取ajax/ajax.js包装原生axios
 					5.2 提取:ajax/index.js统一管理请求
-			6.使用Nprogress制作进度条效果
+			6.使用Nprogress制作进度条效果（假）
 
