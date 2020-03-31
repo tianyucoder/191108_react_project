@@ -25,5 +25,16 @@
 			redux下
 
 ### day05任务
-			1.
+			1.Login组件，弹窗提示登录是否成功，用到：message组件
+			2.搭建redux环境(选择性练习)
+			3.登录成功，保存用户信息到redux中，随后跳转到Admin
+			4.Admin组件中，要读取redux中保存的用户信息（注意对象结构）
+			5.登录成功，将用户信息保存到local中，redux初始化用户信息的时候，从local中读取
+			6.对Login组件和Admin组件进行权限验证(没有登录，只能看login；已经登录，不能看login)
+				备注：render中做校验，render中的跳转要用Redirect
+			7.Admin组件的整体布局
+			8.Header组件的静态布局
+			9.screenfull全屏库的使用(F11全屏带来的问题)
+			10.Header组件和redux的交互
+			11.antd中confirm组件的使用
 
