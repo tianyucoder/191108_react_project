@@ -1,12 +1,14 @@
 import {SAVE_USER_INFO} from '../action_types'
 
-let _user
-let _token = localStorage.getItem('token')
+let _user //准备好_user接收从local中读取出来的user
+let _token = localStorage.getItem('token') //从local中读取token
 try {
+	//尝试解析local中的user字符串
 	_user = JSON.parse(localStorage.getItem('user'))
-	console.log('@@@',_user);
+	//如果local中没有user，那么JSON.parse(localStorage.getItem('user'))返回的就是null
 	if(_user === null) _user={}
 } catch (error) {
+	//如果解析的JSON字符串不合法
 	_user = {}
 }
 
