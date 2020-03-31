@@ -1,20 +1,29 @@
 import React, { Component } from 'react'
+import { Layout } from 'antd';
 import {Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
+import './css/admin.less'
+
+const { Header, Footer, Sider, Content } = Layout;
 
 class Admin extends Component {
 	render() {
 		if(!this.props.isLogin) return <Redirect to="/login"/>
 		return (
-			<div style={{fontSize:'20px'}}>
-				欢迎{this.props.username}登录
-			</div>
+			<Layout className="admin-wraper">
+				<Sider>Sider</Sider>
+				<Layout>
+					<Header className="demo">Header</Header>
+					<Content>Content</Content>
+					<Footer>Footer</Footer>
+				</Layout>
+			</Layout>
 		)
 	}
 }
+
 export default connect(
 	(state)=>({
-		username:state.userInfo.user.username,
 		isLogin:state.userInfo.isLogin
 	}),
 	{}

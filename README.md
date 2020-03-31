@@ -18,3 +18,12 @@
 					5.2 提取:ajax/index.js统一管理请求
 			6.使用Nprogress制作进度条效果（假）
 
+### day03任务
+			redux上
+
+### day04任务
+			redux下
+
+### day05任务
+			1.
+

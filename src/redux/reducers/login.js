@@ -1,4 +1,4 @@
-import {SAVE_USER_INFO} from '../action_types'
+import {SAVE_USER_INFO,DELET_USER_INFO} from '../action_types'
 
 let _user //准备好_user接收从local中读取出来的user
 let _token = localStorage.getItem('token') //从local中读取token
@@ -25,6 +25,9 @@ export default function (preState=initState,action){
 	switch (type) {
 		case SAVE_USER_INFO:
 			newState = {...data,isLogin:true}
+			return newState
+		case DELET_USER_INFO:
+			newState = {user:{},token:'',isLogin:false}
 			return newState
 		default:
 			return preState

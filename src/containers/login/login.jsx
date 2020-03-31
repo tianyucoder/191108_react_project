@@ -19,10 +19,9 @@ class Login extends Component {
 		let result = await reqLogin(values)
 		const {status,data,msg} = result
 		if(status === 0){ //如果登录是成功的(用户名、密码是对的)
-			message.success('登录成功！')
+			message.success('登录成功！',1)
 			//通知redux保存用户信息
 			this.props.saveUserInfo(data)
-			this.props.history.replace('/admin')
 		}else{
 			message.error(msg)
 		}
