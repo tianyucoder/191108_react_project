@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Layout } from 'antd';
 import {Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
+import Header from './header/header'
 import './css/admin.less'
 
-const { Header, Footer, Sider, Content } = Layout;
+const {Footer, Sider, Content } = Layout;
 
 class Admin extends Component {
 	render() {
@@ -13,7 +14,7 @@ class Admin extends Component {
 			<Layout className="admin-wraper">
 				<Sider>Sider</Sider>
 				<Layout>
-					<Header className="demo">Header</Header>
+					<Header/>
 					<Content>Content</Content>
 					<Footer>Footer</Footer>
 				</Layout>
