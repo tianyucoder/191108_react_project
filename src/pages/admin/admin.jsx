@@ -4,7 +4,7 @@ export default class Admin extends Component {
 	render() {
 		return (
 			<div>
-				Admin
+				欢迎xxxx登录
 			</div>
 		)
 	}

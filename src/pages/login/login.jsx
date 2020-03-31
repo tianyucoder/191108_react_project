@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form,Input,Button} from 'antd';
+import {Form,Input,Button, message} from 'antd';
 import {UserOutlined,LockOutlined} from '@ant-design/icons';
 import {reqLogin} from '../../ajax'
 import './css/login.less'
@@ -14,7 +14,14 @@ export default class Login extends Component {
 		//获取表单数据
 		//axios发送post请求，默认会把参数通过请求体携带，以什么编码形式进行编码？url json
 		let result = await reqLogin(values)
-		console.log('@@@',result);
+		const {status,data,msg} = result
+		if(status === 0){ //如果登录是成功的(用户名、密码是对的)
+			message.success('登录成功！')
+			console.log(data);
+			this.props.history.replace('/admin')
+		}else{
+			message.error(msg)
+		}
 	};
 	
 	//pwdValidator函数会在用户每次在密码框里输入一个字符的时候调用，会把用户输入的值传递过来，即：value
