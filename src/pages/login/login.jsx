@@ -1,13 +1,16 @@
 import React, {Component} from 'react'
 import {Form,Input,Button, message} from 'antd';
+import {Redirect} from 'react-router-dom'
 import {UserOutlined,LockOutlined} from '@ant-design/icons';
+import {connect} from 'react-redux'
+import {createSaveUserAction} from '../../redux/actions/login'
 import {reqLogin} from '../../ajax'
 import './css/login.less'
 import logo from './imgs/logo.png'
 
 const {Item} = Form
 
-export default class Login extends Component {
+class Login extends Component {
 
 	//表单提交的回调
   onFinish = async values => {
@@ -17,7 +20,8 @@ export default class Login extends Component {
 		const {status,data,msg} = result
 		if(status === 0){ //如果登录是成功的(用户名、密码是对的)
 			message.success('登录成功！')
-			console.log(data);
+			//通知redux保存用户信息
+			this.props.saveUserInfo(data)
 			this.props.history.replace('/admin')
 		}else{
 			message.error(msg)
@@ -36,6 +40,11 @@ export default class Login extends Component {
 	}
 	
 	render() {
+		console.log(this.props);
+		if(this.props.isLogin){
+			
+			return <Redirect to="/admin"/>
+		}
 		/*
 			用户名/密码的的合法性要求
 				1). 必须输入
@@ -96,3 +105,10 @@ export default class Login extends Component {
 		)
 	}
 }
+
+export default connect(
+	(state)=>({
+		isLogin:state.userInfo.isLogin
+	}), //传递状态
+	{saveUserInfo:createSaveUserAction} //传递操作状态的方法
+)(Login)
