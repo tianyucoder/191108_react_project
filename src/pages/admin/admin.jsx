@@ -4,9 +4,7 @@ import {connect} from 'react-redux'
 
 class Admin extends Component {
 	render() {
-		if(!this.props.isLogin){
-			return <Redirect to="/login"/>
-		}
+		if(!this.props.isLogin) return <Redirect to="/login"/>
 		return (
 			<div style={{fontSize:'20px'}}>
 				欢迎{this.props.username}登录

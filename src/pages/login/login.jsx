@@ -40,11 +40,7 @@ class Login extends Component {
 	}
 	
 	render() {
-		console.log(this.props);
-		if(this.props.isLogin){
-			
-			return <Redirect to="/admin"/>
-		}
+		if(this.props.isLogin) return <Redirect to="/admin"/>
 		/*
 			用户名/密码的的合法性要求
 				1). 必须输入
