@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {Menu} from 'antd';
-import {Link} from 'react-router-dom'
 import logo from '../../../static/imgs/logo.png'
 import menus from '../../../config/menu_config'
 import './css/left_nav.less'
@@ -15,10 +14,8 @@ export default class left_nav extends Component {
 			if(!menuObj.children){
 				return (
 					<Item key={menuObj.key}>
-						<Link to={menuObj.path}>
-							<menuObj.icon/>
-							<span>{menuObj.title}</span>
-						</Link>
+						<menuObj.icon/>
+						<span>{menuObj.title}</span>
 					</Item>
 				)
 			}else{
