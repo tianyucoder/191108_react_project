@@ -20,9 +20,9 @@ class Header extends Component {
 		isFull:false, //标识是否全屏
 		time:dayjs().format('YYYY年 MM月DD日 HH:mm:ss'),//当前时间
 		weatherData:{//天气信息
-			dayPictureUrl:'', //天气图片地址
-			weather:'', //天气文字信息
-			temperature:'' //温度
+			dayPictureUrl:'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1392434059,685483866&fm=26&gp=0.jpg', //天气图片地址
+			weather:'晴转多云', //天气文字信息
+			temperature:'17~25℃' //温度
 		} 
 	}
 
@@ -60,7 +60,7 @@ class Header extends Component {
 			this.setState({time:dayjs().format('YYYY年 MM月DD日 HH:mm:ss')})
 		},1000)
 		//发送请求获取天气信息
-		this.getWeatherData()
+		//this.getWeatherData()
 	}
 
 	componentWillUnmount(){
