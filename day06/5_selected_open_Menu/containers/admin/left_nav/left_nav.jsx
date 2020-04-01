@@ -50,7 +50,7 @@ class LeftNav extends Component {
 				</header>
 				<div>
 					<Menu
-						selectedKeys={[selectedKey]} //初始选中的菜单项 key 数组
+						defaultSelectedKeys={[selectedKey]} //初始选中的菜单项 key 数组
 						defaultOpenKeys={currentPathArr} //初始展开的 SubMenu 菜单项 key 数组
 						mode="inline" //菜单类型
 						theme="dark" //主题
