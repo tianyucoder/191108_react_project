@@ -10,6 +10,7 @@ import screenfull from 'screenfull'
 import dayjs from 'dayjs'
 import {reqWeatherData} from '../../../ajax'
 import {createDeleteUserAction} from '../../../redux/actions/login'
+import {createSaveTitleAction} from '../../../redux/actions/title'
 import './css/header.less'
 
 const {confirm} = Modal;
@@ -39,6 +40,7 @@ class Header extends Component {
 			cancelText:'取消',
 			onOk:()=> { //确认按钮的回调
 				this.props.deleteUser()
+				this.props.deleteTitle('')
 			}
 		});
 	}
@@ -80,7 +82,7 @@ class Header extends Component {
 				</div>
 				<div className="header-bottom">
 					<div className="bottom-left">
-						<span>首页</span>
+						<span>{this.props.title}</span>
 					</div>
 					<div className="bottom-right">
 						<span>{time}</span>
@@ -94,8 +96,12 @@ class Header extends Component {
 }
 
 export default connect(
-	(state)=>({username:state.userInfo.user.username}),//传递状态
+	(state)=>({//传递状态
+		username:state.userInfo.user.username,
+		title:state.title
+	}),
 	{
-		deleteUser:createDeleteUserAction
+		deleteUser:createDeleteUserAction,
+		deleteTitle:createSaveTitleAction
 	}//传递操作状态的方法
 )(Header)
