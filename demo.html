@@ -9,8 +9,21 @@
 
 <script type="text/javascript" >
 
-let a = JSON.stringify(null)
-console.log(typeof(a));
+/**
+*	slice()方法: / splice
+		1.没有改变原来的数组，返回一个新的数组 
+		2.接收个2个参数,分别是：起始位置、结束位置
+		3.返回起始位置和结束位置之间的项（包含起始位置，但不包含结束位置）
+		4.可以只传一个起始位置，返回从起始位置到结尾的所有项
+		5.两个参数还可以用负数,数组的长度 + 负数,来确定位置从哪里开始，从哪里结束
+*/
+
+let arr = [1,3,5,7,9]
+
+let a = arr.slice(-1)
+
+console.log(a);
+
 </script>
 	
 </body>
