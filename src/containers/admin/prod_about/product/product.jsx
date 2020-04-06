@@ -27,7 +27,6 @@ export default class Product extends Component {
 		const {status,data,msg} = result
 		if(status === 0 ){
 			const {list,total,pageNum} = data
-			console.log(data);
 			this.setState({productList:list,total,current:pageNum})
 		}else{
 			message.error(msg)
