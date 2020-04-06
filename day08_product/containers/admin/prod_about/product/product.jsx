@@ -16,17 +16,23 @@ export default class Product extends Component {
 		keyWord:'',//搜索关键词
 	}
 
+	//获取商品列表、搜索商品都调用getProductList
 	getProductList = async(number=1)=>{
-		let result 
-		if(this.isSearch){
-			const {searchType,keyWord} = this.state
+		let result //提前准备好result
+		if(this.isSearch){ //如果是搜索
+			const {searchType,keyWord} = this.state //获取搜索类型、搜索关键词
+			//请求搜索商品
 			result = await reqSearchProduct(searchType,keyWord,number,PAGE_SIZE)
 		}else{
+			//请求商品列表
 			result = await reqProductList(number,PAGE_SIZE)
 		}
+		//从result上获取status,data,msg
 		const {status,data,msg} = result
-		if(status === 0 ){
+		if(status === 0 ){ //如果没有错误
+			//从data上获取列表数据、总数、当前页
 			const {list,total,pageNum} = data
+			//数据维护进状态
 			this.setState({productList:list,total,current:pageNum})
 		}else{
 			message.error(msg)
@@ -85,6 +91,7 @@ export default class Product extends Component {
 				render:(id)=>(
 					<div>
 						<Button 
+							//点击详情跳转到详情路由，同时携带当前商品的id
 							onClick={()=>{this.props.history.push(`/admin/prod_about/product/detail/${id}`)}} 
 							size="small" 
 							type="link"
@@ -92,6 +99,7 @@ export default class Product extends Component {
 						</Button>
 						<br/>
 						<Button 
+							//点击修改跳转到修改路由，同时携带当前商品的id
 							onClick={()=>{this.props.history.push(`/admin/prod_about/product/update/${id}`)}} 
 							size="small" 
 							type="link"
@@ -107,6 +115,7 @@ export default class Product extends Component {
 				title={
 					<div>
 						<Select 
+							//Select做成了受控组件
 							onChange={(value)=>{this.setState({searchType:value})}} 
 							defaultValue="productName"
 						>
@@ -116,14 +125,16 @@ export default class Product extends Component {
 							<Input 
 								placeholder="输入关键字" 
 								style={{width:"20%",margin:"0px 10px"}}
-								onChange={(event)=>{this.setState({keyWord:event.target.value})}}
+								onChange={(event)=>{this.setState({keyWord:event.target.value})}} //受控Input
 							/>	
+							{/* 点击搜索按钮后：1.标识为搜索，2.调用getProductList去搜索 */}
 							<Button onClick={()=>{this.isSearch = true;this.getProductList()}} type="primary">
 								<SearchOutlined />搜索
 							</Button>
 					</div>	
 				} 
 				extra={
+					/* 点击添加商品跳转到添加路由 */
 					<Button onClick={()=>{this.props.history.push('/admin/prod_about/product/add')}} type="primary" >
 						<PlusCircleOutlined />添加商品
 					</Button>

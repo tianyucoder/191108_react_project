@@ -21,15 +21,15 @@ class Category extends Component {
 		//如果修改弹窗，currentCategory就是当前要编辑的那个分类对象
 		const {_id,name} = currentCategory
 		if(_id && name){
-			this._id = _id
-			this.name = name
-			this.isUpdate = true
+			this._id = _id //缓存id
+			this.name = name //缓存名称
+			this.isUpdate = true //标识为更新
 		}else{
-			this._id = ''
-			this.name = ''
-			this.isUpdate = false
+			this._id = '' //删除id
+			this.name = '' //删除name
+			this.isUpdate = false //标识为非更新
 		}
-		//重置表单
+		//重置表单,加判断是为了防止第一次展示弹窗，还没有实例化Form导致报错
 		if(this.refs.categoryForm){
 			this.refs.categoryForm.resetFields()
 		}
@@ -46,8 +46,10 @@ class Category extends Component {
 		}else{
 			let result
 			if(this.isUpdate){
+				//如果是更新分类
 				result = await reqUpdateCategory(this._id,categoryName)
 			}else{
+				//如果是添加分类
 				result = await reqAddCategory(categoryName)
 			}
 			const {status,msg} = result
@@ -92,7 +94,7 @@ class Category extends Component {
 			},
 			{
 				title: '操作',
-				//dataIndex: '_id',
+				//dataIndex: '_id', //注意dataIndex和render配合使用的问题
 				key: 'name',
 				width:'15%',
 				align:'center',
