@@ -1,36 +1,38 @@
 import React, {Component} from 'react'
-import {Card,Select,Input,Button,Table} from 'antd';
+import {Card,Select,Input,Button,Table, message} from 'antd';
 import {SearchOutlined,PlusCircleOutlined} from '@ant-design/icons';
+import {reqProductList} from '../../../../ajax'
+import {PAGE_SIZE} from '../../../../config'
 
 const {Option} = Select
 
 export default class Product extends Component {
+
+	state = {
+		productList:[], //商品列表
+		total:0 //数据总数
+	}
+
+	getProductList = async(number=1)=>{
+		let result = await reqProductList(number,PAGE_SIZE)
+		const {status,data,msg} = result
+		if(status === 0 ){
+			console.log(data);
+			const {list,total} = data
+			this.setState({productList:list,total})
+		}else{
+			message.error(msg)
+		}
+	}
+
+	componentDidMount(){
+		this.getProductList()
+	}
+
 	render() {
 
 		//数据源
-		const dataSource = [
-			{
-				key: '1',
-				name: '测试商品1',
-				desc: '一个很好的商品',
-				price: '199',
-				status:1
-			},
-			{
-				key: '2',
-				name: '测试商品2',
-				desc: '用过的都说好',
-				price: '299',
-				status:2
-			},
-			{
-				key: '3',
-				name: '测试商品3',
-				desc: '你值得拥有',
-				price: '399',
-				status:1
-			},
-		];
+		const dataSource = this.state.productList
 
 		//表格列的配置
 		const columns = [
@@ -90,7 +92,7 @@ export default class Product extends Component {
 							<Option value="name">按名称搜索</Option>	
 							<Option value="desc">按描述搜索</Option>	
 						</Select>
-							<Input style={{width:"15%",margin:"0px 10px"}}/>	
+							<Input placeholder="输入关键字" style={{width:"20%",margin:"0px 10px"}}/>	
 							<Button type="primary"><SearchOutlined />搜索</Button>
 					</div>	
 				} 
@@ -100,6 +102,12 @@ export default class Product extends Component {
 					dataSource={dataSource} 
 					columns={columns} 
 					bordered
+					rowKey="_id"
+					pagination={{
+						total:this.state.total,
+						pageSize:PAGE_SIZE,
+						onChange:(number)=>{this.getProductList(number)}
+					}}
 				/>
 			</Card>
 		)

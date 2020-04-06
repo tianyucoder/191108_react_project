@@ -4,3 +4,4 @@ export const WEATHER_LOCATION = '深圳' //天气接口的授权码
 export const WEATHER_BASE_URL = 'http://api.map.baidu.com/telematics/v3/weather' //天气接口的授权码
 export const AJAX_BASE_URL = 'http://localhost:3000' //ajax请求的基本路径
 export const AJAX_TIMEOUT = 2000 //ajax请求的超时时间
+export const PAGE_SIZE = 4 //每页展示多少条数据

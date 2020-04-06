@@ -1,9 +1,11 @@
 import React, {Component,Fragment} from 'react'
 import {Card,Button,Table,Modal,Form,Input,message} from 'antd';
 import {connect} from 'react-redux'
-import {reqAddCategory,reqUpdateCategory} from '../../../../ajax'
-import {createSaveCategoryAsyncAction,createSaveCategoryAction} from '../../../../redux/actions/category'
 import {PlusCircleOutlined} from '@ant-design/icons';
+import {reqAddCategory,reqUpdateCategory} from '../../../../ajax'
+import {PAGE_SIZE} from '../../../../config'
+import {createSaveCategoryAsyncAction,createSaveCategoryAction} from '../../../../redux/actions/category'
+
 
 const {Item} = Form
 
@@ -48,7 +50,7 @@ class Category extends Component {
 			}else{
 				result = await reqAddCategory(categoryName)
 			}
-			const {status,data,msg} = result
+			const {status,msg} = result
 			if(status === 0){
 				message.success(this.isUpdate ? '修改分类成功！' : '添加分类成功！')
 				this.props.saveCategory()
@@ -112,7 +114,7 @@ class Category extends Component {
 						columns={columns} //列的配置
 						bordered //边框
 						pagination={{ //分页器
-							pageSize:4, //每页展示多少条数据
+							pageSize:PAGE_SIZE, //每页展示多少条数据
 							showQuickJumper:true
 						}}
 						rowKey="_id"//告诉Table以每个数据的_id属性作为唯一标识
