@@ -14,7 +14,21 @@ class Category extends Component {
 	};
 
 	//调用showModal展示弹窗
-	showModal = () => {
+	showModal = (currentCategory) => {
+		//如果新增弹窗，currentCategory就是默认的event
+		//如果修改弹窗，currentCategory就是当前要编辑的那个分类对象
+		const {_id,name} = currentCategory
+		if(_id && name){
+			this._id = _id
+			this.name = name
+			console.log('是修改',this._id,this.name);
+			this.isUpdate = true
+		}else{
+			console.log('是新增')
+			this._id = ''
+			this.name = ''
+			this.isUpdate = false
+		}
 		//弹窗展示
     this.setState({visible: true});
 	};
@@ -57,6 +71,9 @@ class Category extends Component {
 	}
 
 	render() {
+		//数据源
+		const dataSource = [...this.props.categoryList]
+
 		//columns是表格中列的配置，是Table组件最核心的配置,每一列所有的特性都在此配置。
 		const columns = [
 			{
@@ -66,11 +83,11 @@ class Category extends Component {
 			},
 			{
 				title: '操作',
-				//dataIndex: 'name',
+				//dataIndex: '_id',
 				key: 'name',
 				width:'15%',
 				align:'center',
-				render:()=><Button type="link">修改分类</Button>
+				render:(categoryObj)=><Button onClick={()=>{this.showModal(categoryObj)}} type="link">修改分类</Button>
 			},
 		];
 
@@ -84,18 +101,18 @@ class Category extends Component {
 					} 
 				>
 					<Table 
-						dataSource={this.props.categoryList.reverse()}  //数据源
+						dataSource={dataSource.reverse()}  //数据源
 						columns={columns} //列的配置
 						bordered //边框
 						pagination={{ //分页器
 							pageSize:4, //每页展示多少条数据
 							showQuickJumper:true
 						}}
-						rowKey="_id"
+						rowKey="_id"//告诉Table以每个数据的_id属性作为唯一标识
 					/>
 				</Card>
 				<Modal
-					title="添加分类" //弹窗的标题
+					title={this.isUpdate ? '修改分类' : '新增分类'} //弹窗的标题
 					visible={this.state.visible} //控制弹窗是否展示
 					onOk={this.handleOk} //确认的回调
 					onCancel={this.handleCancel}//确认的回调
@@ -105,11 +122,9 @@ class Category extends Component {
 					<Form ref="categoryForm">
 						<Item
 							name='categoryName'
-							rules={[
-								{required:true,message:'分类名必填'}
-							]}
+							rules={[{required:true,message:'分类名必填'}]}
 						>
-							<Input placeholder="请输入分类名"/>
+							<Input defaultValue={this.name} placeholder="请输入分类名"/>
 						</Item>
 					</Form>
 				</Modal>
