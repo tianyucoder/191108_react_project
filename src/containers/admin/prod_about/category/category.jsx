@@ -1,7 +1,7 @@
 import React, {Component,Fragment} from 'react'
 import {Card,Button,Table,Modal,Form,Input,message} from 'antd';
 import {connect} from 'react-redux'
-import {reqAddCategory} from '../../../../ajax'
+import {reqAddCategory,reqUpdateCategory} from '../../../../ajax'
 import {createSaveCategoryAsyncAction,createSaveCategoryAction} from '../../../../redux/actions/category'
 import {PlusCircleOutlined} from '@ant-design/icons';
 
@@ -21,13 +21,15 @@ class Category extends Component {
 		if(_id && name){
 			this._id = _id
 			this.name = name
-			console.log('是修改',this._id,this.name);
 			this.isUpdate = true
 		}else{
-			console.log('是新增')
 			this._id = ''
 			this.name = ''
 			this.isUpdate = false
+		}
+		//重置表单
+		if(this.refs.categoryForm){
+			this.refs.categoryForm.resetFields()
 		}
 		//弹窗展示
     this.setState({visible: true});
@@ -40,13 +42,18 @@ class Category extends Component {
 		if(!categoryName){
 			message.error('分类名不能为空')
 		}else{
-			let result = await reqAddCategory(categoryName)
+			let result
+			if(this.isUpdate){
+				result = await reqUpdateCategory(this._id,categoryName)
+			}else{
+				result = await reqAddCategory(categoryName)
+			}
 			const {status,data,msg} = result
 			if(status === 0){
-				message.success('添加分类成功！')
-				//this.props.saveCategory()
+				message.success(this.isUpdate ? '修改分类成功！' : '添加分类成功！')
+				this.props.saveCategory()
 				//通知redux在他所保存的那个分类列表中加入一个data
-				this.props.saveNewCategory([...this.props.categoryList,data])
+				//this.props.saveNewCategory([...this.props.categoryList,data])
 				//重置表单
 				this.refs.categoryForm.resetFields()
 				//弹窗隐藏
@@ -124,6 +131,11 @@ class Category extends Component {
 							name='categoryName'
 							rules={[{required:true,message:'分类名必填'}]}
 						>
+							{/* 
+								Input组件如果被Form表单包裹了，那么Input组件的defaultValue，只有在两个情况有用：
+									1.Form表单初始化的时候。
+									2.Form表单重置的时候。
+							*/}
 							<Input defaultValue={this.name} placeholder="请输入分类名"/>
 						</Item>
 					</Form>
