@@ -11,34 +11,74 @@ export default class Product extends Component {
 		const dataSource = [
 			{
 				key: '1',
-				name: '胡彦斌',
-				age: 32,
-				address: '西湖区湖底公园1号',
+				name: '测试商品1',
+				desc: '一个很好的商品',
+				price: '199',
+				status:1
 			},
 			{
 				key: '2',
-				name: '胡彦祖',
-				age: 42,
-				address: '西湖区湖底公园1号',
+				name: '测试商品2',
+				desc: '用过的都说好',
+				price: '299',
+				status:2
+			},
+			{
+				key: '3',
+				name: '测试商品3',
+				desc: '你值得拥有',
+				price: '399',
+				status:1
 			},
 		];
 
 		//表格列的配置
 		const columns = [
 			{
-				title: '姓名',
+				title: '商品名称',
 				dataIndex: 'name',
 				key: 'name',
 			},
 			{
-				title: '年龄',
-				dataIndex: 'age',
-				key: 'age',
+				title: '商品描述',
+				dataIndex: 'desc',
+				key: 'desc',
 			},
 			{
-				title: '住址',
-				dataIndex: 'address',
-				key: 'address',
+				title: '价格',
+				dataIndex: 'price',
+				key: 'price',
+				render:(price)=> '￥'+price,
+				align:'center',
+			},
+			{
+				title: '状态',
+				dataIndex: 'status',
+				key: 'status',
+				align:'center',
+				render:(status)=>(
+					<div>
+						<Button type={status === 1 ? 'danger' : 'primary'}>
+							{status === 1 ? '下架' : '上架'}
+						</Button>
+						<br/>
+						<span>{status === 1 ? '在售' : '售罄'}</span>
+					</div>
+				)
+			},
+			{
+				title: '操作',
+				//dataIndex: 'status',
+				key: 'opera',
+				width:'10%',
+				align:'center',
+				render:()=>(
+					<div>
+						<Button type="link">详情</Button>
+						<br/>
+						<Button type="link">修改</Button>
+					</div>
+				)
 			},
 		];
 
