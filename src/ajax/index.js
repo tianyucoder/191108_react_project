@@ -37,4 +37,8 @@ export const reqSearchProduct = (searchType,keyWord,pageNum,pageSize) => ajax.ge
 export const reqProductDetailById = (productId) => ajax.get('/manage/product/info',{params:{productId}})
 //请求上架/下架商品
 export const reqChangProductStatus = (productId,status) => ajax.post('/manage/product/updateStatus',{productId,status})
+//请求删除图片
+export const reqDeletePicture = (name)=> ajax.post('/manage/img/delete',{name})
+//请求添加商品
+export const reqAddProduct = (productObj)=> ajax.post('/manage/product/add',productObj)
 

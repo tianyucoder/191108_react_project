@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import {Upload, Modal, message} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
+import {reqDeletePicture} from '../../../../ajax'
 
 //getBase64专门用于将图片转为base64编码
 function getBase64(file) {
@@ -26,7 +27,16 @@ export default class PicturesWall extends Component {
         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
 			} */
     ],
-  };
+	};
+	
+	//根据fileList生成一个由新的图片名所组成的数组
+	getImgsNameArr = ()=>{
+		let arr = []
+		this.state.fileList.forEach((imgObj)=>{
+			arr.push(imgObj.name)
+		})
+		return arr
+	}
 
 	//关闭预览按钮的回调（右上角的关闭按钮）
   handleCancel = () => this.setState({ previewVisible: false });
@@ -44,7 +54,7 @@ export default class PicturesWall extends Component {
 
 	//图片状态发生改变的回调（一个图片要上传，要经历很多次自身状态的改变）
 	//1.handleChange被调用的时候一定接收到了一个对象。2.这个对象中一定包含fileList这个属性
-  handleChange = ({file,fileList}) => {
+  handleChange = async({file,fileList}) => {
 		if(file.status === 'done'){
 			if(file.response.status === 0){
 				message.success('图片上传成功！')
@@ -52,6 +62,13 @@ export default class PicturesWall extends Component {
 				fileList[fileList.length-1].name = name
 				fileList[fileList.length-1].url = url
 			}
+		}
+		if(file.status === 'removed'){
+			//发送ajax请求，告诉服务器根据图片名去删除图片
+			let result = await reqDeletePicture(file.name)
+			const {status,msg} = result
+			if(status === 0) message.success('删除图片成功！')
+			else message.error(msg)
 		}
 		this.setState({fileList});
 	}

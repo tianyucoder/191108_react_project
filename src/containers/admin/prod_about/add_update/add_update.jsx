@@ -1,17 +1,28 @@
 import React, { Component } from 'react'
-import {Button,Card,Form,Input, Select} from 'antd'
+import {Button,Card,Form,Input, Select, message} from 'antd'
 import {connect} from 'react-redux'
 import {ArrowLeftOutlined} from '@ant-design/icons';
 import {createSaveCategoryAsyncAction} from '../../../../redux/actions/category'
+import {reqAddProduct} from '../../../../ajax'
 import PictureWall from './picture_wall'
+import RichText from './rich_text'
 
 const {Item} = Form
 const {Option} = Select
 
 class AddUpdate extends Component {
 
-	onFinish = (values)=>{
-		console.log(values);
+	onFinish = async(values)=>{
+		values.imgs = this.refs.pictureWall.getImgsNameArr() //找照片墙组件获取图片数组
+		values.detail = this.refs.richText.getRichText() //找富文本组件获取商品详情
+		let result = await reqAddProduct(values)
+		const {status,msg} = result
+		if(status === 0){
+			message.success('商品添加成功！')
+			this.props.history.push('/admin/prod_about/product')
+		}else{
+			message.error(msg)
+		}
 	}
 
 	componentDidMount(){
@@ -78,14 +89,14 @@ class AddUpdate extends Component {
 						wrapperCol={{span:16}}
 						style={{marginLeft:'10px'}}
 					>
-						<PictureWall/>
+						<PictureWall ref="pictureWall"/>
 					</Item>
 					<Item
 						label="商品详情"
-						wrapperCol={{span:10}}
+						wrapperCol={{span:16}}
 						style={{marginLeft:'10px'}}
 					>
-						此处放置富文本编辑器组件
+						<RichText ref="richText"/>
 					</Item>
 					<Item>
 						<Button type="primary" htmlType="submit">提交</Button>
