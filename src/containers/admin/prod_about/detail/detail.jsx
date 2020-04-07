@@ -19,6 +19,7 @@ class Detail extends Component {
 		detail:'',//商品详情
 	}
 
+	//根据分类id计算分类名
 	getCategoryName = (categoryId)=>{
 		let result = this.props.categoryList.find((categoryObj)=>{
 			return categoryObj._id === categoryId
@@ -26,12 +27,14 @@ class Detail extends Component {
 		if(result) return result.name
 	}
 
+	//根据商品id获取商品详细信息
 	getProductDetail = async()=>{
 		//获取通过路由传递过来的商品_id
-		const {id} = this.props.match.params
-		let result = await reqProductDetailById(id)
+		const {id} = this.props.match.params //获取传递过来的id
+		let result = await reqProductDetailById(id) //请求详细信息
 		const {status,data,msg} = result
 		if(status === 0){
+			//如果成功维护数据进状态
 			const {imgs,categoryId,name,desc,price,detail} = data
 			this.setState({imgs,categoryId,name,desc,price,detail})
 		}else{
@@ -40,15 +43,15 @@ class Detail extends Component {
 	}
 
 	componentDidMount(){
-		const {categoryList,saveCategoty} = this.props//尝试着从redux中读取商品分类数据
-		if(!categoryList.length){
-			console.log('@@');
-			saveCategoty()
-		}
+		//尝试着从redux中读取商品分类数据
+		const {categoryList,saveCategoty} = this.props
+		//如果没有分类信息，通知redux请求分类信息并保存
+		if(!categoryList.length) saveCategoty()
 		this.getProductDetail() //根据id查询商品详细信息
 	}
 
 	render() {
+		//从状态中读取数据
 		const {imgs,categoryId,name,desc,price,detail} = this.state
 		return (
 			<Card 
@@ -94,7 +97,7 @@ class Detail extends Component {
 
 export default connect(
 	(state)=>({categoryList:state.categoryList}),//传递状态
-	{
+	{//传递操作状态的方法
 		saveCategoty:createSaveCategoryAsyncAction
-	}//传递操作状态的方法
+	}
 )(Detail)
