@@ -35,32 +35,45 @@ class LeftNav extends Component {
 		if(!this.props.title) this.getTitleByPath()
 	}
 
+	//专门用于校验当前菜单是否有权限查看
+	hasAuth = (menuObj)=>{
+		const {userMenus} = this.props //用户能看到的菜单数组
+		if(this.props.username === 'admin') return true
+		if(!menuObj.children){
+			return userMenus.find((item)=> item === menuObj.key)
+		}else{
+			return menuObj.children.some((childMenuObj)=> userMenus.indexOf(childMenuObj.key) !== -1)
+		}
+	}
+
 	//根据菜单配置文件生成菜单
 	createMenu = (menuArr)=>{
 		return menuArr.map((menuObj)=>{
-			if(!menuObj.children){
-				return (
-					<Item onClick={()=>{this.props.saveTitle(menuObj.title)}} key={menuObj.key}>
-						<Link to={menuObj.path}>
-							<menuObj.icon/>
-							<span>{menuObj.title}</span>
-						</Link>
-					</Item>
-				)
-			}else{
-				return (
-					<SubMenu
-						key={menuObj.key}
-						title={
-							<span>
+			if(this.hasAuth(menuObj)){
+				if(!menuObj.children){
+					return (
+						<Item onClick={()=>{this.props.saveTitle(menuObj.title)}} key={menuObj.key}>
+							<Link to={menuObj.path}>
 								<menuObj.icon/>
 								<span>{menuObj.title}</span>
-							</span>
-						}
-					>
-						{this.createMenu(menuObj.children)}
-					</SubMenu>
-				)
+							</Link>
+						</Item>
+					)
+				}else{
+					return (
+						<SubMenu
+							key={menuObj.key}
+							title={
+								<span>
+									<menuObj.icon/>
+									<span>{menuObj.title}</span>
+								</span>
+							}
+						>
+							{this.createMenu(menuObj.children)}
+						</SubMenu>
+					)
+				}
 			}
 		})
 	}
@@ -92,6 +105,10 @@ class LeftNav extends Component {
 
 //withRouter可以加工组件，能让非路由组件拥有路由组件的API
 export default connect(
-	(state)=>({title:state.title}),//传递状态
+	(state)=>({
+		title:state.title,
+		userMenus:state.userInfo.user.role.menus,
+		username:state.userInfo.user.username
+	}),//传递状态
 	{saveTitle:createSaveTitleAction}//传递操作状态的方法
 )(withRouter(LeftNav))

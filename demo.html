@@ -26,12 +26,20 @@ let a = arr.slice(-1)
 console.log(a); */
 
 
-function test({a}) {
+/* function test({a}) {
 	console.log(a);
 }
 
 let obj =  {m:1,n:5}
-test(obj)
+test(obj) */
+
+let arr = [{name:'a',age:10},{name:'b',age:11},{name:'c',age:12}]
+
+let a = arr.some((item)=>{
+	return item.age > 12
+})
+console.log(a);
+
 
 
 </script>
